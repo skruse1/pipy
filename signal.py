@@ -6,17 +6,45 @@ import time
 
 channelleft = 21
 channelright = 20
-blinkleft = 12
-blinkright = 16
+
 GPIO.setmode(GPIO.BCM)
 some_value = 5000
 GPIO.setup(channelleft, GPIO.OUT)
 GPIO.setup(channelright, GPIO.OUT)
-GPIO.setup(blinkleft, GPIO.OUT)
-GPIO.setup(blinkright, GPIO.OUT)
+GPIO.setup(channelright, GPIO.IN)
+GPIO.setup(channelleft, GPIO.IN)
+GPIO.setup(16, GPIO.OUT)
+GPIO.setup(12, GPIO.OUT)
+state1 = GPIO.input(channelright)
+state2 = GPIO.input(channelleft)
 
-GPIO.output(16,1)
-time.sleep(1)
+
+def blinkleft():
+        GPIO.output(16,1)## Switch on pin 11
+        time.sleep(1)## Wait
+        GPIO.output(16,0)## Switch off pin 11
+        time.sleep(1)## Wait
+        state2 = GPIO.input(channelleft)
+
+def blinkright():
+        GPIO.output(12,1)## Switch on pin 11
+        time.sleep(1)## Wait
+        GPIO.output(12,0)## Switch off pin 11
+        time.sleep(1)## Wait
+        state1 = GPIO.input(channelright)
+        
+while state1 == 1:
+        blinkright()
+        GPIO.output(12, 1)
+        if state1 == 0:
+            break        
+        
+while state2 == 1:
+        blinkleft()
+        GPIO.output(16, 1)
+        if state2 == 0:
+            break     
+
 
 #@skywriter.move()
 #def move(x, y, z):
